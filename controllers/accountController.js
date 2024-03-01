@@ -11,6 +11,26 @@ dotenv.config();
  * @swagger
  * components:
  *  schemas:
+ *      UserLogin:
+ *        type: object
+ *        required:
+ *          - email
+ *          - password
+ *        properties:
+ *          email:
+ *            type: string
+ *            description: The user email address
+ *          password:
+ *            type: string
+ *            description: The user password
+ *      TokenResponse:
+ *        type: object
+ *        required:
+ *          - token
+ *        properties:
+ *          token:
+ *            type: string
+ *            description: The login token
  *      VerifyUserCode:
  *        type: object
  *        required:
@@ -293,6 +313,27 @@ router.put("/verify", (req, res) => {
     });
 });
 
+/**
+ * @swagger
+ * /api/account/login:
+ *  post:
+ *    summary: Login
+ *    tags: [Accounts]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/UserLogin'
+ *    responses:
+ *      200:
+ *        description: The login credential token
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/TokenResponse'
+ *    
+ */
 router.post("/login", (req, res) => {
   // request > email + password
   const { email, password } = req.body;
@@ -320,8 +361,6 @@ router.post("/login", (req, res) => {
             return res.status(200).json({
               message: token
             });
-
-
           } else {
             return res.status(401).json({
               message: "The password is not match",
