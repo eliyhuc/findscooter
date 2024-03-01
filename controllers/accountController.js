@@ -184,10 +184,78 @@ router.delete("/deleteAccount/:id", (req, res) => {
     });
 });
 
-//
-router.post("/verify", (req, res) => {});
 
-//
+/**
+ * @swagger
+ * /api/account/updateAccount/{id}:
+ *  put:
+ *    summary: Update account details
+ *    tags: [Accounts]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: integer
+ *        required: true
+ *        description: The user id
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/User'
+ *    responses:
+ *      200:
+ *        description: The user account was updated
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/User'
+ */
+
+router.put('/updateAccount/:id', (req, res) => {
+  const userId = req.params.id;
+  const { firstName, lastName } = req.body;
+
+  Account.findByPk(userId)
+  .then(account => {
+    if(account){
+
+      account.firstName = firstName;
+      account.lastName = lastName;
+      return account.save()
+      .then(results => {
+        return res.status(200).json({
+          message: results
+        });
+      })
+
+    } else {
+      return res.status(401).json({
+        message: 'User not found',
+      });
+    }
+  })
+  .catch(error => {
+    return res.status(500).json({
+      message: error,
+    });
+  })
+})
+
+
+
+
+
+
+router.post("/verify", (req, res) => {
+  //request code + email / id
+  //find the user in db
+  //check if code match existing code
+  //update to true + save
+  //response 
+});
+
 router.post("/login", (req, res) => {});
 
 export default router;
