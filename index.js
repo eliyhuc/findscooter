@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import swaggerJSDoc from 'swagger-jsdoc';
 import SwaggerUi from 'swagger-ui-express';
 import accountController from './controllers/accountController.js'
+import productsController from './controllers/productsController.js'
 import database from './services/database.js';
 
 dotenv.config();
@@ -22,13 +23,11 @@ const swaggerOptions = {
     },
     apis: ['./controllers/accountController.js']
 }
-
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 app.use('/api-docs', SwaggerUi.serve, SwaggerUi.setup(swaggerDocs));
 
-
-
 app.use('/api/account', accountController);
+app.use('/api/products', productsController);
 
 const port = process.env.PORT;
 
